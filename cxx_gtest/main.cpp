@@ -7,9 +7,9 @@
 int test_fun(int input){
     return 2*input;
 }
-TEST(testRet,input){
+TEST(testRet,all){
     ASSERT_EQ(test_fun(2),4);
-    ASSERT_EQ(test_fun(3),4);
+    ASSERT_EQ(test_fun(3),6);
 }
 int main(int argc,char** argv){
     testing::InitGoogleTest(&argc,argv);
