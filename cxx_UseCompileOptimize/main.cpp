@@ -5,8 +5,12 @@
 #include<iostream>
 #include<typeinfo>
 #include<vector>
+#include<glog/logging.h>
 #include<thread>
+
 #include"cpp_name.h"
+#include"common.h"
+
 struct Base {
     Base(){
         std::cout<<"Base constructor"<<std::endl;
@@ -28,10 +32,37 @@ void foo(std::array<Base,2>& bases){
         cout<<a.get_a()<<endl;
     }
 }
-void foo_1(int  a){}
+
+std::mutex mut;
+class Data_uniq_ptr{ // 用于保护互斥量
+public:
+    Data_uniq_ptr(int* ptr):int_ptr(ptr){
+      };
+    std::shared_ptr<int> int_ptr PT_GUARDED_BY(mut);
+private:
+
+};
+void functionCalc(Data_uniq_ptr& dataUniqPtr){
+    int i=0;
+    shared_ptr<int> sharedPtr = dataUniqPtr.int_ptr;
+    while(*sharedPtr.get()<100){
+       ( *dataUniqPtr.int_ptr.get())++;
+
+       this_thread::sleep_for(chrono::milliseconds(5));
+    }
+}
 int main()
 {
-    array<Base,2> base{1,4};
-    array<Base,2> b =base;
-    foo(base);
+    Data_uniq_ptr dataUniqPtr(new int());
+    vector<thread> threads;
+    LOG(INFO)<<"main thread id:"<<this_thread::get_id();
+    for(int i=0;i<4;i++){
+        threads.push_back(std::move(thread(functionCalc,std::ref(dataUniqPtr))));
+    }
+
+    for(int i=0;i<4;i++){
+        if(threads[i].joinable()){
+            threads[i].join();
+        }
+    }
 }
