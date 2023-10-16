@@ -7,7 +7,6 @@
 #include<vector>
 #include<glog/logging.h>
 #include<thread>
-
 #include"cpp_name.h"
 #include"common.h"
 
@@ -32,12 +31,11 @@ void foo(std::array<Base,2>& bases){
         cout<<a.get_a()<<endl;
     }
 }
-
 std::mutex mut;
 class Data_uniq_ptr{ // 用于保护互斥量
 public:
     Data_uniq_ptr(int* ptr):int_ptr(ptr){
-      };
+    };
     std::shared_ptr<int> int_ptr PT_GUARDED_BY(mut);
 private:
 
@@ -46,9 +44,9 @@ void functionCalc(Data_uniq_ptr& dataUniqPtr){
     int i=0;
     shared_ptr<int> sharedPtr = dataUniqPtr.int_ptr;
     while(*sharedPtr.get()<100){
-       ( *dataUniqPtr.int_ptr.get())++;
+        ( *dataUniqPtr.int_ptr.get())++;
 
-       this_thread::sleep_for(chrono::milliseconds(5));
+        this_thread::sleep_for(chrono::milliseconds(5));
     }
 }
 int main(int argc,char** argv)
