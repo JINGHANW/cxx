@@ -51,10 +51,12 @@ void functionCalc(Data_uniq_ptr& dataUniqPtr){
        this_thread::sleep_for(chrono::milliseconds(5));
     }
 }
-int main()
+int main(int argc,char** argv)
 {
     Data_uniq_ptr dataUniqPtr(new int());
     vector<thread> threads;
+    google::SetLogDestination(google::GLOG_INFO, ".log");
+    google::InitGoogleLogging(argv[0]);
     LOG(INFO)<<"main thread id:"<<this_thread::get_id();
     for(int i=0;i<4;i++){
         threads.push_back(std::move(thread(functionCalc,std::ref(dataUniqPtr))));
