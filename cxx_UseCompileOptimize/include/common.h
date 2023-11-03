@@ -1,11 +1,11 @@
 //
 // Created by wjh on 10/16/23.
 //
+#ifndef __COMMON_H
+#define __COMMON_H
 #include <iostream>
 #include <map>
 #include <string>
-#ifndef USE_COMPILEOPTIMIZE_COMMON_H
-#define USE_COMPILEOPTIMIZE_COMMON_H
 #include<memory>
 #include<mutex>
 #if defined(__SUPPORT_TS_ANNOTATION__) || defined(__clang__)
@@ -15,9 +15,8 @@
 #endif
 
 #define PT_GUARDED_BY(x) THREAD_ANNOTATION_ATTRIBUTE__(pt_guarded_by(x))
-#endif
-#ifndef __REFLECT_H
-#define __REFLECT_H
+
+
 #include<functional>
 
 
@@ -79,5 +78,7 @@ public:
     }
 };
 
+#define RegisterClass(base_class_name, sub_class_name) static ClassRegisterHelper<base_class_name> sub_class_name##_register_helper(#sub_class_name, NewObject<base_class_name, sub_class_name>);
 
+#define CreateObject(base_class_name, sub_class_name_as_string) GetRegister<base_class_name>().CreateObject(sub_class_name_as_string)
 #endif

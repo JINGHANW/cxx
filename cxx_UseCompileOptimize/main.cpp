@@ -9,7 +9,7 @@
 #include<thread>
 #include"cpp_name.h"
 #include"common.h"
-
+#include<functional>
 struct Base {
     Base(){
         std::cout<<"Base constructor"<<std::endl;
@@ -21,9 +21,32 @@ struct Base {
         return a+b;
     }
     auto get_a() -> int{return a;}
+    Base operator()(){
+        return Base();
+    }
 private:
     int a;
 }; // 非多态
+
+
+struct Addd{
+public:
+    Addd(){
+        std::cout<<"A:"<<std::endl;
+    }
+    Addd(int a):a(a){
+        std::cout<<"int constructor"<<std::endl;
+    }
+    Addd operator()(){
+        return Addd();
+    }
+    Addd operator()(int a){
+        return Addd(a);
+    }
+private:
+    int a;
+};
+
 using namespace std;
 void foo(std::array<Base,2>& bases){
     cout<<cpp_type_name<decltype(bases)>()<<endl;
@@ -49,16 +72,15 @@ void functionCalc(Data_uniq_ptr& dataUniqPtr){
         this_thread::sleep_for(chrono::milliseconds(5));
     }
 }
-class A{
-public:
-    A(int a){};
-};
-class B{
-public:
-    B(string b){};
-};
+#define Conn(x,y)x##y
+#define ToString(x) #x
+
+
 
 int main(int argc,char** argv)
 {
+
+    auto fun2 =std::bind(Addd(),std::placeholders::_1);
+    Addd a = std::invoke(fun2,111);
 
 }
